@@ -1,0 +1,29 @@
+{
+  // BlockerPasses gamedata - s2sdk gamedata format (same schema as the s2sdk plugin's own
+  // gamedata.jsonc), loaded via s2sdk LoadGameConfigFile / GetGameConfigSignature.
+  //
+  // SetCollisionBounds: the raw byte pattern the Metamod original scanned for
+  // ("48 81 C7 ? ? ? ? E9 ? ? ? ? CC CC CC CC 55 48 8D 15"). It resolves to a this-adjusting
+  // thunk (`add rdi, 0x8C8; jmp <real function>`): the real function compares the six floats at
+  // this+0x40..0x54 (the mins/maxs of the collision subobject) against the passed bounds and
+  // updates/notifies when they differ - i.e. CBaseEntity::SetCollisionBounds(const Vector*
+  // mins, const Vector* maxs), called with the entity pointer the thunk adjusts itself.
+  //
+  // Verified against the current game binary (2026-10-08):
+  //   /root/plugify-port/cs2test/upper/game/csgo/bin/linuxsteamrt64/libserver.so
+  //   (41749016 bytes, BuildID e42535b81663c214e41c7fbe9b40bc22796f1b65)
+  //   - the full pattern (with the int3 padding and the "55 48 8D 15" tail) matches exactly once
+  //     (file offset 0xF9E220 -> VA 0xF9F220);
+  //   - the relaxed form (48 81 C7 ?? ?? ?? ?? E9 ?? ?? ?? ??) matches 58 times, so the padding
+  //     and the following-frame prologue are what makes the original pattern unique.
+  // Re-run plugins/BlockerPasses/tools/scan_signature.py after a game update.
+  "$schema": "https://raw.githubusercontent.com/untrustedmodders/plugify-plugin-s2sdk/refs/heads/main/schemas/gamedata.schema.json",
+  "csgo": {
+    "Signatures": {
+      "SetCollisionBounds": {
+        "library": "server",
+        "linuxsteamrt64": "48 81 C7 ? ? ? ? E9 ? ? ? ? CC CC CC CC 55 48 8D 15"
+      }
+    }
+  }
+}
