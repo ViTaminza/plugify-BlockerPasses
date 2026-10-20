@@ -1,0 +1,28 @@
+{
+	"$schema": "https://raw.githubusercontent.com/untrustedmodders/plugify/refs/heads/main/schemas/plugin.schema.json",
+	"version": "${BLOCKERPASSES_VERSION}",
+	"name": "BlockerPasses",
+	"description": "Per-map blocker items and beams, ported from the Metamod plugin BlockerPasses (ABKAM 2.0.1). 'mm_bp' / '!bp' opens the admin menu (access_permission '@admin/bp' from addons/configs/BlockerPasses/settings.ini, or a SteamID64 granted this map via 'mm_bp_access'): place a model at the crosshair, build a wall (hidden func_brush collision box with OBB bounds through the engine's SetCollisionBounds signature, plus a 24-beam env_beam wireframe), move/rotate/scale/recolour/hide/delete items, teleport to them or move them to a ping. Below min_players_to_open (humans, ignore_spectators) the passages are open and the blockades disappear; round_start re-applies the state. Items persist per map in addons/data/bp_data.ini; phrases come from addons/translations/blockerpasses.phrases.txt. The SetCollisionBounds signature lives in the plugin's gamedata.jsonc. Requires the admin_system core. No exported methods.",
+	"author": "ABKAM, ported to Plugify",
+	"website": "https://github.com/untrustedmodders/plugify",
+	"license": "GPL-3.0",
+	"entry": "bin/BlockerPasses",
+	"platforms": [],
+	"language": "cpp",
+	"dependencies": [
+		{
+			"name": "s2sdk",
+			"constraints": ">=2.18.2"
+		},
+		{
+			"name": "admin_system",
+			"constraints": ">=1.0.0"
+		},
+		{
+			"name": "hudmenu",
+			"constraints": ">=1.0.0",
+			"optional": true
+		}
+	],
+	"methods": []
+}
